@@ -65,7 +65,11 @@ class SAFire:
 
 @click.command()
 @click.option('--cookie', '-c', help='REQUIRED: session_id_ing cookie from saf', required=True)
-def print_all_material(cookie):
+def print_all_material_for_aria2(cookie):
+    """
+    Prints to stdout a aria2 compatible link list.
+    Directory stucture: ./{course_name}/{section_name}/{file_name}
+    """
     c= SAFire(cookie)
 
     for course in c.extract_past_courses():
@@ -75,4 +79,4 @@ def print_all_material(cookie):
                 print(f"{file_['file_url']}\n\tdir=./{course['name']}/{section['section_name']}\n\tout={file_['file_name']}")
 
 if __name__ == "__main__":
-    print_all_material()
+    print_all_material_for_aria2()

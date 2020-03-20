@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+import click
 
 class SAFire:
     def __init__(self, session_id_ing):
@@ -62,12 +63,16 @@ class SAFire:
         return ''.join(c for c in filename if c in valid_chars).strip()
 
 
-if __name__ == "__main__":
-
-    c= SAFire('COOOKIE')
+@click.command()
+@click.option('--cookie', '-c', help='REQUIRED: session_id_ing cookie from saf', required=True)
+def print_all_material(cookie):
+    c= SAFire(cookie)
 
     for course in c.extract_past_courses():
         course_sections = c.get_bs_of_url(course['link'])
         for section in c.extract_files_of_types(course_sections, ['.pdf', '.rar', '.zip', '.ppt', '.pptx', '.xls', '.xlsx', '.doc', '.docx']):
             for file_ in section['files']:
                 print(f"{file_['file_url']}\n\tdir=./{course['name']}/{section['section_name']}\n\tout={file_['file_name']}")
+
+if __name__ == "__main__":
+    print_all_material()
